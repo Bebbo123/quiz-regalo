@@ -24,19 +24,21 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             max-width: 500px;
             width: 100%;
-        }
-        h1 {
             text-align: center;
+        }
+        h1, h2 {
             margin-bottom: 20px;
         }
         .question {
+            display: none;
             margin-bottom: 15px;
         }
         input {
-            display: block;
             width: 100%;
             padding: 10px;
-            margin-top: 5px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
         button {
             margin-top: 10px;
@@ -52,74 +54,73 @@
         button:hover {
             background: #4cae4c;
         }
-        .result {
-            display: none;
+        #message {
             margin-top: 20px;
-            text-align: center;
             color: green;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Quiz a Sorpresa!</h1>
-        <div id="quiz"></div>
-        <button id="submit">Invia Risposte</button>
-        <div id="result" class="result">
-            <h2>Hai completato il quiz!</h2>
-            <p>Ti regalo un biglietto per il concerto di <strong>Cesare Cremonini</strong> il <strong>18 Luglio 2025</strong>!</p>
+        <h1>Benvenuta nel tuo quiz per il tuo regalo personale!</h1>
+        <div id="question-container">
+            <div class="question" id="q0">
+                <p>1. Qual è il gruppo preferito di Roberto?</p>
+                <input type="text" id="a0" placeholder="Risposta">
+            </div>
+            <div class="question" id="q1">
+                <p>2. Qual è la parolaccia detta da Chicco?</p>
+                <input type="text" id="a1" placeholder="Risposta">
+            </div>
+            <div class="question" id="q2">
+                <p>3. Di che colore era il cavallo bianco di Napoleone?</p>
+                <input type="text" id="a2" placeholder="Risposta">
+            </div>
         </div>
+        <button id="next">Prossima domanda</button>
+        <div id="message"></div>
     </div>
 
     <script>
-        const quizData = [
-            { question: "Qual è il gruppo preferito di Roberto?", answer: "883" },
-            { question: "Qual è la parolaccia detta da Chicco?", answer: "mortacci vostra" },
-            { question: "Di che colore era il cavallo bianco di Napoleone?", answer: "bianco" },
-            { question: "Chi ha scritto Bohemian Rhapsody?", answer: "queen" },
-            { question: "Quale strumento suona un batterista?", answer: "batteria" },
-            { question: "Chi è il 'Re del Pop'?", answer: "michael jackson" },
-            { question: "Dove è nato il samba?", answer: "brasile" },
-            { question: "Chi ha cantato 'Vita Spericolata'?", answer: "vasco rossi" },
-            { question: "Chi ha scritto la 'Nona Sinfonia'?", answer: "beethoven" },
-            { question: "Chi ha scritto 'Imagine'?", answer: "john lennon" },
-            { question: "Di cosa si tratta?", answer: "concerto" },
-            { question: "Quando avverrà?", answer: "luglio" },
-            { question: "Di chi è il concerto?", answer: "cesare cremonini" }
+        const questions = [
+            { question: "Qual è il gruppo preferito di Roberto?", answer: "883", hint: "Si tratta di un evento musicale." },
+            { question: "Qual è la parolaccia detta da Chicco?", answer: "mortacci vostra", hint: "Avverrà in estate." },
+            { question: "Di che colore era il cavallo bianco di Napoleone?", answer: "bianco", hint: "Il mese ha 31 giorni." }
         ];
+        let currentQuestion = 0;
 
-        const quizContainer = document.getElementById("quiz");
-        const submitButton = document.getElementById("submit");
-        const resultContainer = document.getElementById("result");
+        const questionContainer = document.getElementById("question-container");
+        const messageDiv = document.getElementById("message");
+        const nextButton = document.getElementById("next");
+        const totalQuestions = questions.length;
 
-        function buildQuiz() {
-            quizData.forEach((item, index) => {
-                const questionDiv = document.createElement("div");
-                questionDiv.classList.add("question");
-                questionDiv.innerHTML = `<p>${index + 1}. ${item.question}</p>` +
-                    `<input type="text" id="q${index}" placeholder="Risposta">`;
-                quizContainer.appendChild(questionDiv);
-            });
+        function showQuestion(index) {
+            document.querySelectorAll(".question").forEach(q => q.style.display = "none");
+            document.getElementById(`q${index}`).style.display = "block";
+            messageDiv.textContent = "";
         }
 
-        function checkAnswers() {
-            let allCorrect = true;
-            quizData.forEach((item, index) => {
-                const answer = document.getElementById(`q${index}`).value.trim().toLowerCase();
-                if (!answer.includes(item.answer.toLowerCase())) {
-                    allCorrect = false;
+        function checkAnswer() {
+            const answerInput = document.getElementById(`a${currentQuestion}`).value.trim().toLowerCase();
+            if (answerInput.includes(questions[currentQuestion].answer.toLowerCase())) {
+                if (currentQuestion < totalQuestions - 1) {
+                    messageDiv.textContent = "Esatto! " + questions[currentQuestion].hint;
+                    currentQuestion++;
+                    setTimeout(() => showQuestion(currentQuestion), 1500);
+                } else {
+                    messageDiv.textContent = "Complimenti hai risposto bene a tutte le domande!";
+                    setTimeout(() => {
+                        messageDiv.innerHTML = "Il tuo regalo è il concerto di <strong>Cesare Cremonini</strong> il 18 Luglio 2025! <br>Tanti auguri di Buon Natale! ✨❤️";
+                    }, 2000);
+                    nextButton.style.display = "none";
                 }
-            });
-
-            if (allCorrect) {
-                resultContainer.style.display = "block";
             } else {
-                alert("Alcune risposte non sono corrette. Riprova!");
+                messageDiv.textContent = "Risposta sbagliata! Riprova.";
             }
         }
 
-        buildQuiz();
-        submitButton.addEventListener("click", checkAnswers);
+        nextButton.addEventListener("click", checkAnswer);
+        showQuestion(currentQuestion);
     </script>
 </body>
 </html>
