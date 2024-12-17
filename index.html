@@ -76,6 +76,46 @@
                 <p>3. Di che colore era il cavallo bianco di Napoleone?</p>
                 <input type="text" id="a2" placeholder="Risposta">
             </div>
+            <div class="question" id="q3">
+                <p>4. Chi ha scritto la famosa canzone 'Bohemian Rhapsody'?</p>
+                <input type="text" id="a3" placeholder="Risposta">
+            </div>
+            <div class="question" id="q4">
+                <p>5. Quale strumento suona tipicamente un batterista?</p>
+                <input type="text" id="a4" placeholder="Risposta">
+            </div>
+            <div class="question" id="q5">
+                <p>6. Chi è il 'Re del Pop'?</p>
+                <input type="text" id="a5" placeholder="Risposta">
+            </div>
+            <div class="question" id="q6">
+                <p>7. In quale paese è nato il genere musicale 'samba'?</p>
+                <input type="text" id="a6" placeholder="Risposta">
+            </div>
+            <div class="question" id="q7">
+                <p>8. Chi ha cantato 'Vita Spericolata'?</p>
+                <input type="text" id="a7" placeholder="Risposta">
+            </div>
+            <div class="question" id="q8">
+                <p>9. Chi ha scritto la 'Nona Sinfonia'?</p>
+                <input type="text" id="a8" placeholder="Risposta">
+            </div>
+            <div class="question" id="q9">
+                <p>10. Chi è l'autore della canzone 'Imagine'?</p>
+                <input type="text" id="a9" placeholder="Risposta">
+            </div>
+            <div class="question" id="q10">
+                <p>11. Di cosa si tratta?</p>
+                <input type="text" id="a10" placeholder="Risposta">
+            </div>
+            <div class="question" id="q11">
+                <p>12. Quando avverrà?</p>
+                <input type="text" id="a11" placeholder="Risposta">
+            </div>
+            <div class="question" id="q12">
+                <p>13. Di chi è il concerto?</p>
+                <input type="text" id="a12" placeholder="Risposta">
+            </div>
         </div>
         <button id="next">Prossima domanda</button>
         <div id="message"></div>
@@ -83,9 +123,19 @@
 
     <script>
         const questions = [
-            { question: "Qual è il gruppo preferito di Roberto?", answer: "883", hint: "Si tratta di un evento musicale." },
-            { question: "Qual è la parolaccia detta da Chicco?", answer: "mortacci vostra", hint: "Avverrà in estate." },
-            { question: "Di che colore era il cavallo bianco di Napoleone?", answer: "bianco", hint: "Il mese ha 31 giorni." }
+            { answer: "883", hint: "Troppo Facile alla prima." },
+            { answer: "mortacci vostra", hint: "Ci sarà da sudare" },
+            { answer: "bianco", hint: "Il mese ha 31 giorni." },
+            { answer: "queen", hint: "Italiano." },
+            { answer: "batteria", hint: "La lettera 'C'." },
+            { answer: "michael jackson", hint: "Per alcuni aspetti centra la poetica " },
+            { answer: "brasile", hint: "Ancora indizi? Vai avanti su..." },
+            { answer: "vasco rossi", hint: "La lettera 'C' si ripete." },
+            { answer: "beethoven", hint: "Si può definire ex per più aspetti" },
+            { answer: "john lennon", hint: "Basta suggerimenti è ora di indovinare" },
+            { answer: "concerto", hint: "È un concerto!" },
+            { answer: "luglio", hint: "Succede a luglio!" },
+            { answer: "cesare cremonini", hint: "Di Cesare Cremonini!" }
         ];
         let currentQuestion = 0;
 
