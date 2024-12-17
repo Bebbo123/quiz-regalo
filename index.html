@@ -14,19 +14,19 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f4f4f4;
-            color: #333;
+            background: url('https://example.com/cremonini-bn.jpg') no-repeat center center/cover;
+            color: #fff;
         }
         .container {
-            background: white;
+            background: rgba(0, 0, 0, 0.8);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             max-width: 500px;
             width: 100%;
             text-align: center;
         }
-        h1, h2 {
+        h1, h2, p {
             margin-bottom: 20px;
         }
         .question {
@@ -56,14 +56,29 @@
         }
         #message {
             margin-top: 20px;
-            color: green;
+            color: #5cb85c;
+        }
+        #welcome-screen, #final-screen {
+            display: none;
+        }
+        #welcome-screen {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Benvenuta nel tuo quiz per il tuo regalo personale!</h1>
+    <!-- Schermata iniziale -->
+    <div class="container" id="welcome-screen">
+        <h1>Benvenuta nel tuo quiz personale!</h1>
+        <p>Scopri il tuo regalo rispondendo a tutte le domande. Buona fortuna!</p>
+        <button id="startQuiz">Inizia il Quiz</button>
+    </div>
+
+    <!-- Container del quiz -->
+    <div class="container" id="quiz-container" style="display: none;">
+        <h2>Domanda</h2>
         <div id="question-container">
+            <!-- Domande -->
             <div class="question" id="q0">
                 <p>1. Qual è il gruppo preferito di Roberto?</p>
                 <input type="text" id="a0" placeholder="Risposta">
@@ -121,28 +136,28 @@
         <div id="message"></div>
     </div>
 
+    <!-- Schermata finale -->
+    <div class="container" id="final-screen" style="display: none;">
+        <h2>Complimenti!</h2>
+        <p>Hai completato il quiz con successo!</p>
+        <p>Il tuo regalo è un biglietto per il concerto di <strong>Cesare Cremonini</strong> il 18 Luglio 2025!</p>
+        <p><strong>Tanti auguri di Buon Natale! ✨❤️</strong></p>
+    </div>
+
     <script>
         const questions = [
-            { answer: "883", hint: "Troppo Facile alla prima." },
-            { answer: "mortacci vostra", hint: "Ci sarà da sudare" },
-            { answer: "bianco", hint: "Il mese ha 31 giorni." },
-            { answer: "queen", hint: "Italiano." },
-            { answer: "batteria", hint: "La lettera 'C'." },
-            { answer: "michael jackson", hint: "Per alcuni aspetti centra la poetica " },
-            { answer: "brasile", hint: "Ancora indizi? Vai avanti su..." },
-            { answer: "vasco rossi", hint: "La lettera 'C' si ripete." },
-            { answer: "beethoven", hint: "Si può definire ex per più aspetti" },
-            { answer: "john lennon", hint: "Basta suggerimenti è ora di indovinare" },
-            { answer: "concerto", hint: "È un concerto!" },
-            { answer: "luglio", hint: "Succede a luglio!" },
-            { answer: "cesare cremonini", hint: "Di Cesare Cremonini!" }
+            "883", "mortacci vostra", "bianco", "queen", "batteria",
+            "michael jackson", "brasile", "vasco rossi", "beethoven",
+            "john lennon", "concerto", "luglio", "cesare cremonini"
         ];
         let currentQuestion = 0;
 
-        const questionContainer = document.getElementById("question-container");
+        const welcomeScreen = document.getElementById("welcome-screen");
+        const quizContainer = document.getElementById("quiz-container");
+        const finalScreen = document.getElementById("final-screen");
         const messageDiv = document.getElementById("message");
         const nextButton = document.getElementById("next");
-        const totalQuestions = questions.length;
+        const startButton = document.getElementById("startQuiz");
 
         function showQuestion(index) {
             document.querySelectorAll(".question").forEach(q => q.style.display = "none");
@@ -151,26 +166,28 @@
         }
 
         function checkAnswer() {
-            const answerInput = document.getElementById(`a${currentQuestion}`).value.trim().toLowerCase();
-            if (answerInput.includes(questions[currentQuestion].answer.toLowerCase())) {
-                if (currentQuestion < totalQuestions - 1) {
-                    messageDiv.textContent = "Esatto! " + questions[currentQuestion].hint;
+            const answer = document.getElementById(`a${currentQuestion}`).value.trim().toLowerCase();
+            if (answer.includes(questions[currentQuestion])) {
+                if (currentQuestion < questions.length - 1) {
+                    messageDiv.textContent = "Risposta esatta!";
                     currentQuestion++;
                     setTimeout(() => showQuestion(currentQuestion), 1500);
                 } else {
-                    messageDiv.textContent = "Complimenti hai risposto bene a tutte le domande!";
-                    setTimeout(() => {
-                        messageDiv.innerHTML = "Il tuo regalo è il concerto di <strong>Cesare Cremonini</strong> il 18 Luglio 2025! <br>Tanti auguri di Buon Natale! ✨❤️";
-                    }, 2000);
-                    nextButton.style.display = "none";
+                    quizContainer.style.display = "none";
+                    finalScreen.style.display = "block";
                 }
             } else {
-                messageDiv.textContent = "Risposta sbagliata! Riprova.";
+                messageDiv.textContent = "Risposta sbagliata. Riprova!";
             }
         }
 
+        startButton.addEventListener("click", () => {
+            welcomeScreen.style.display = "none";
+            quizContainer.style.display = "block";
+            showQuestion(currentQuestion);
+        });
+
         nextButton.addEventListener("click", checkAnswer);
-        showQuestion(currentQuestion);
     </script>
 </body>
 </html>
