@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Regalo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
+            background: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #4cae4c;
+        }
+        .result {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz a Sorpresa!</h1>
+        <div id="quiz"></div>
+        <button id="submit">Invia Risposte</button>
+        <div id="result" class="result">
+            <h2>Hai completato il quiz!</h2>
+            <p>Ti regalo un biglietto per il concerto di <strong>Cesare Cremonini</strong> il <strong>18 Luglio 2025</strong>!</p>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            { question: "Qual è il gruppo preferito di Roberto?", answer: "883" },
+            { question: "Qual è la parolaccia detta da Chicco?", answer: "mortacci vostra" },
+            { question: "Di che colore era il cavallo bianco di Napoleone?", answer: "bianco" },
+            { question: "Chi ha scritto Bohemian Rhapsody?", answer: "queen" },
+            { question: "Quale strumento suona un batterista?", answer: "batteria" },
+            { question: "Chi è il 'Re del Pop'?", answer: "michael jackson" },
+            { question: "Dove è nato il samba?", answer: "brasile" },
+            { question: "Chi ha cantato 'Vita Spericolata'?", answer: "vasco rossi" },
+            { question: "Chi ha scritto la 'Nona Sinfonia'?", answer: "beethoven" },
+            { question: "Chi ha scritto 'Imagine'?", answer: "john lennon" },
+            { question: "Di cosa si tratta?", answer: "concerto" },
+            { question: "Quando avverrà?", answer: "luglio" },
+            { question: "Di chi è il concerto?", answer: "cesare cremonini" }
+        ];
+
+        const quizContainer = document.getElementById("quiz");
+        const submitButton = document.getElementById("submit");
+        const resultContainer = document.getElementById("result");
+
+        function buildQuiz() {
+            quizData.forEach((item, index) => {
+                const questionDiv = document.createElement("div");
+                questionDiv.classList.add("question");
+                questionDiv.innerHTML = `<p>${index + 1}. ${item.question}</p>` +
+                    `<input type="text" id="q${index}" placeholder="Risposta">`;
+                quizContainer.appendChild(questionDiv);
+            });
+        }
+
+        function checkAnswers() {
+            let allCorrect = true;
+            quizData.forEach((item, index) => {
+                const answer = document.getElementById(`q${index}`).value.trim().toLowerCase();
+                if (!answer.includes(item.answer.toLowerCase())) {
+                    allCorrect = false;
+                }
+            });
+
+            if (allCorrect) {
+                resultContainer.style.display = "block";
+            } else {
+                alert("Alcune risposte non sono corrette. Riprova!");
+            }
+        }
+
+        buildQuiz();
+        submitButton.addEventListener("click", checkAnswers);
+    </script>
+</body>
+</html>
