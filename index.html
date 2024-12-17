@@ -14,14 +14,14 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: url('https://example.com/cremonini-bn.jpg') no-repeat center center/cover;
-            color: #fff;
+            background-color: #fff;
+            color: #333;
         }
         .container {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.05);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             max-width: 500px;
             width: 100%;
             text-align: center;
@@ -58,7 +58,7 @@
             margin-top: 20px;
             color: #5cb85c;
         }
-        #welcome-screen, #final-screen {
+        #welcome-screen, #game-start, #final-screen {
             display: none;
         }
         #welcome-screen {
@@ -69,12 +69,12 @@
 <body>
     <!-- Schermata iniziale -->
     <div class="container" id="welcome-screen">
-        <h1>Benvenuta nel tuo quiz personale!</h1>
-        <p>Scopri il tuo regalo rispondendo a tutte le domande. Buona fortuna!</p>
-        <button id="startQuiz">Inizia il Quiz</button>
+        <h1>Benvenuta al quiz per scoprire il tuo regalo!</h1>
+        <p>Sei pronta? Premi "Giochiamo?" per iniziare.</p>
+        <button id="gameStart">Giochiamo?</button>
     </div>
 
-    <!-- Container del quiz -->
+    <!-- Schermata iniziale del quiz -->
     <div class="container" id="quiz-container" style="display: none;">
         <h2>Domanda</h2>
         <div id="question-container">
@@ -91,44 +91,8 @@
                 <p>3. Di che colore era il cavallo bianco di Napoleone?</p>
                 <input type="text" id="a2" placeholder="Risposta">
             </div>
-            <div class="question" id="q3">
-                <p>4. Chi ha scritto la famosa canzone 'Bohemian Rhapsody'?</p>
-                <input type="text" id="a3" placeholder="Risposta">
-            </div>
-            <div class="question" id="q4">
-                <p>5. Quale strumento suona tipicamente un batterista?</p>
-                <input type="text" id="a4" placeholder="Risposta">
-            </div>
-            <div class="question" id="q5">
-                <p>6. Chi è il 'Re del Pop'?</p>
-                <input type="text" id="a5" placeholder="Risposta">
-            </div>
-            <div class="question" id="q6">
-                <p>7. In quale paese è nato il genere musicale 'samba'?</p>
-                <input type="text" id="a6" placeholder="Risposta">
-            </div>
-            <div class="question" id="q7">
-                <p>8. Chi ha cantato 'Vita Spericolata'?</p>
-                <input type="text" id="a7" placeholder="Risposta">
-            </div>
-            <div class="question" id="q8">
-                <p>9. Chi ha scritto la 'Nona Sinfonia'?</p>
-                <input type="text" id="a8" placeholder="Risposta">
-            </div>
-            <div class="question" id="q9">
-                <p>10. Chi è l'autore della canzone 'Imagine'?</p>
-                <input type="text" id="a9" placeholder="Risposta">
-            </div>
-            <div class="question" id="q10">
-                <p>11. Di cosa si tratta?</p>
-                <input type="text" id="a10" placeholder="Risposta">
-            </div>
-            <div class="question" id="q11">
-                <p>12. Quando avverrà?</p>
-                <input type="text" id="a11" placeholder="Risposta">
-            </div>
             <div class="question" id="q12">
-                <p>13. Di chi è il concerto?</p>
+                <p>4. Di chi è il concerto?</p>
                 <input type="text" id="a12" placeholder="Risposta">
             </div>
         </div>
@@ -137,7 +101,7 @@
     </div>
 
     <!-- Schermata finale -->
-    <div class="container" id="final-screen" style="display: none;">
+    <div class="container" id="final-screen" style="display: none; background-color: #fff;">
         <h2>Complimenti!</h2>
         <p>Hai completato il quiz con successo!</p>
         <p>Il tuo regalo è un biglietto per il concerto di <strong>Cesare Cremonini</strong> il 18 Luglio 2025!</p>
@@ -146,9 +110,13 @@
 
     <script>
         const questions = [
-            "883", "mortacci vostra", "bianco", "queen", "batteria",
-            "michael jackson", "brasile", "vasco rossi", "beethoven",
-            "john lennon", "concerto", "luglio", "cesare cremonini"
+            "883", "mortacci vostra", "bianco", "cesare cremonini"
+        ];
+        const hints = [
+            "Suggerimento: Si tratta di una band italiana famosa negli anni '90!",
+            "Suggerimento: È qualcosa che Chicco dice quando si arrabbia!",
+            "Suggerimento: È un colore ovvio!",
+            "Suggerimento: L'artista ha scritto tante canzoni romantiche italiane!"
         ];
         let currentQuestion = 0;
 
@@ -157,27 +125,30 @@
         const finalScreen = document.getElementById("final-screen");
         const messageDiv = document.getElementById("message");
         const nextButton = document.getElementById("next");
-        const startButton = document.getElementById("startQuiz");
+        const startButton = document.getElementById("gameStart");
 
         function showQuestion(index) {
             document.querySelectorAll(".question").forEach(q => q.style.display = "none");
             document.getElementById(`q${index}`).style.display = "block";
-            messageDiv.textContent = "";
+            messageDiv.textContent = hints[index] || "";
         }
 
         function checkAnswer() {
             const answer = document.getElementById(`a${currentQuestion}`).value.trim().toLowerCase();
             if (answer.includes(questions[currentQuestion])) {
                 if (currentQuestion < questions.length - 1) {
-                    messageDiv.textContent = "Risposta esatta!";
+                    messageDiv.textContent = `Risposta esatta! ${hints[currentQuestion + 1] || ''}`;
                     currentQuestion++;
                     setTimeout(() => showQuestion(currentQuestion), 1500);
                 } else {
-                    quizContainer.style.display = "none";
-                    finalScreen.style.display = "block";
+                    messageDiv.textContent = "Risposta esatta! Ultima domanda: " + hints[hints.length - 1];
+                    setTimeout(() => {
+                        quizContainer.style.display = "none";
+                        finalScreen.style.display = "block";
+                    }, 2000);
                 }
             } else {
-                messageDiv.textContent = "Risposta sbagliata. Riprova!";
+                messageDiv.textContent = "Risposta sbagliata. Riprova! " + hints[currentQuestion];
             }
         }
 
