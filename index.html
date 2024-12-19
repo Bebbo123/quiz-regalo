@@ -64,7 +64,8 @@
         #welcome-screen {
             display: block;
         }
-        #hint-list {
+        #hint-dropdown {
+            display: none;
             position: fixed;
             top: 10%;
             right: 10%;
@@ -73,16 +74,27 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             max-width: 200px;
-            display: none;
         }
-        #hint-list ul {
+        #hint-dropdown ul {
             list-style-type: none;
             padding: 0;
             margin: 0;
         }
-        #hint-list li {
+        #hint-dropdown li {
             margin-bottom: 10px;
             font-size: 14px;
+        }
+        #hint-dropdown button {
+            width: 100%;
+            background: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        #hint-dropdown button:hover {
+            background: #4cae4c;
         }
     </style>
 </head>
@@ -90,7 +102,7 @@
     <!-- Schermata iniziale -->
     <div class="container" id="welcome-screen">
         <h1>Benvenuta al quiz per scoprire il tuo regalo!</h1>
-        <p>Questo quiz ti guiderà passo dopo passo al tuo regalo. Perché ogni cosa, anche i regali, vanno guadagnati! Divertiti e buon viaggio: ci vediamo alla fine!</p>
+        <p>Questo quiz ti guiderà passo dopo passo al tuo regalo. Usa gli indizi per rispondere alle ultime tre domande!</p>
         <button id="gameStart">Giochiamo?</button>
     </div>
 
@@ -156,10 +168,10 @@
         <div id="message"></div>
     </div>
 
-    <!-- Lista degli indizi -->
-    <div id="hint-list">
-        <h3>Indizi:</h3>
-        <ul id="hints">
+    <!-- Dropdown degli indizi -->
+    <div id="hint-dropdown">
+        <button id="dropdownButton">Mostra Indizi</button>
+        <ul id="hints" style="display: none;">
             <li id="hint0">1. Troppo facile</li>
             <li id="hint1" style="display: none;">2. Sicuramente ti piace</li>
             <li id="hint2" style="display: none;">3. Ultimamente ne abbiamo parlato</li>
@@ -194,7 +206,9 @@
         const messageDiv = document.getElementById("message");
         const nextButton = document.getElementById("next");
         const startButton = document.getElementById("gameStart");
-        const hintList = document.getElementById("hint-list");
+        const hintDropdown = document.getElementById("hint-dropdown");
+        const dropdownButton = document.getElementById("dropdownButton");
+        const hintsList = document.getElementById("hints");
 
         function showQuestion(index) {
             document.querySelectorAll(".question").forEach(q => q.style.display = "none");
@@ -229,15 +243,24 @@
             }
         }
 
+        function toggleHints() {
+            if (hintsList.style.display === "none") {
+                hintsList.style.display = "block";
+            } else {
+                hintsList.style.display = "none";
+            }
+        }
+
         startButton.addEventListener("click", () => {
             welcomeScreen.style.display = "none";
             quizContainer.style.display = "block";
-            hintList.style.display = "block";
+            hintDropdown.style.display = "block";
             showQuestion(currentQuestion);
             showNextHint();
         });
 
         nextButton.addEventListener("click", checkAnswer);
+        dropdownButton.addEventListener("click", toggleHints);
     </script>
 </body>
 </html>
