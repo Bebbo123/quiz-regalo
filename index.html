@@ -73,6 +73,7 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             max-width: 200px;
+            display: none;
         }
         #hint-list ul {
             list-style-type: none;
@@ -159,16 +160,16 @@
     <div id="hint-list">
         <h3>Indizi:</h3>
         <ul id="hints">
-            <li>1. Troppo facile</li>
-            <li>2. Sicuramente ti piace</li>
-            <li>3. Ultimamente ne abbiamo parlato</li>
-            <li>4. Italia</li>
-            <li>5. Farà caldo</li>
-            <li>6. Centra con la poetica</li>
-            <li>7. Si può definire ex per due motivi</li>
-            <li>8. Inizia per C</li>
-            <li>9. La C si ripete</li>
-            <li>10. Spettacolare</li>
+            <li id="hint0">1. Troppo facile</li>
+            <li id="hint1" style="display: none;">2. Sicuramente ti piace</li>
+            <li id="hint2" style="display: none;">3. Ultimamente ne abbiamo parlato</li>
+            <li id="hint3" style="display: none;">4. Italia</li>
+            <li id="hint4" style="display: none;">5. Farà caldo</li>
+            <li id="hint5" style="display: none;">6. Centra con la poetica</li>
+            <li id="hint6" style="display: none;">7. Si può definire ex per due motivi</li>
+            <li id="hint7" style="display: none;">8. Inizia per C</li>
+            <li id="hint8" style="display: none;">9. La C si ripete</li>
+            <li id="hint9" style="display: none;">10. Spettacolare</li>
         </ul>
     </div>
 
@@ -185,6 +186,7 @@
             "883", "mortacci vostra", "4", "rachide", "bagno", "susanu", "hotel", "federica", "cesano", "no", "concerto", "luglio", "cesare cremonini"
         ];
         let currentQuestion = 0;
+        let currentHint = 0;
 
         const welcomeScreen = document.getElementById("welcome-screen");
         const quizContainer = document.getElementById("quiz-container");
@@ -192,6 +194,7 @@
         const messageDiv = document.getElementById("message");
         const nextButton = document.getElementById("next");
         const startButton = document.getElementById("gameStart");
+        const hintList = document.getElementById("hint-list");
 
         function showQuestion(index) {
             document.querySelectorAll(".question").forEach(q => q.style.display = "none");
@@ -199,12 +202,22 @@
             messageDiv.textContent = "";
         }
 
+        function showNextHint() {
+            if (currentHint < 10) {
+                document.getElementById(`hint${currentHint}`).style.display = "block";
+                currentHint++;
+            }
+        }
+
         function checkAnswer() {
             const answer = document.getElementById(`a${currentQuestion}`).value.trim().toLowerCase();
             if (answer.includes(questions[currentQuestion])) {
                 if (currentQuestion < questions.length - 1) {
                     currentQuestion++;
-                    setTimeout(() => showQuestion(currentQuestion), 1500);
+                    setTimeout(() => {
+                        showQuestion(currentQuestion);
+                        showNextHint();
+                    }, 1500);
                 } else {
                     setTimeout(() => {
                         quizContainer.style.display = "none";
@@ -219,7 +232,9 @@
         startButton.addEventListener("click", () => {
             welcomeScreen.style.display = "none";
             quizContainer.style.display = "block";
+            hintList.style.display = "block";
             showQuestion(currentQuestion);
+            showNextHint();
         });
 
         nextButton.addEventListener("click", checkAnswer);
