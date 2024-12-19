@@ -56,7 +56,7 @@
         }
         #message {
             margin-top: 20px;
-            color: #5cb85c;
+            color: #d9534f;
         }
         #welcome-screen, #game-start, #final-screen {
             display: none;
@@ -64,13 +64,32 @@
         #welcome-screen {
             display: block;
         }
+        #hint-list {
+            position: fixed;
+            top: 10%;
+            right: 10%;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            max-width: 200px;
+        }
+        #hint-list ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        #hint-list li {
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
     <!-- Schermata iniziale -->
     <div class="container" id="welcome-screen">
         <h1>Benvenuta al quiz per scoprire il tuo regalo!</h1>
-        <p>Sei pronta? Premi "Giochiamo?" per iniziare.</p>
+        <p>Questo quiz ti guiderà passo dopo passo al tuo regalo. Perché ogni cosa, anche i regali, vanno guadagnati! Divertiti e buon viaggio: ci vediamo alla fine!</p>
         <button id="gameStart">Giochiamo?</button>
     </div>
 
@@ -100,6 +119,23 @@
         <div id="message"></div>
     </div>
 
+    <!-- Lista degli indizi -->
+    <div id="hint-list">
+        <h3>Indizi:</h3>
+        <ul id="hints">
+            <li>1. Troppo facile</li>
+            <li>2. Sicuramente ti piace</li>
+            <li>3. Ultimamente ne abbiamo parlato</li>
+            <li>4. Italia</li>
+            <li>5. Farà caldo</li>
+            <li>6. Centra con la poetica</li>
+            <li>7. Si può definire ex per due motivi</li>
+            <li>8. Inizia per C</li>
+            <li>9. La C si ripete</li>
+            <li>10. Spettacolare</li>
+        </ul>
+    </div>
+
     <!-- Schermata finale -->
     <div class="container" id="final-screen" style="display: none; background-color: #fff;">
         <h2>Complimenti!</h2>
@@ -111,12 +147,6 @@
     <script>
         const questions = [
             "883", "mortacci vostra", "bianco", "cesare cremonini"
-        ];
-        const hints = [
-            "Suggerimento: Si tratta di una band italiana famosa negli anni '90!",
-            "Suggerimento: È qualcosa che Chicco dice quando si arrabbia!",
-            "Suggerimento: È un colore ovvio!",
-            "Suggerimento: L'artista ha scritto tante canzoni romantiche italiane!"
         ];
         let currentQuestion = 0;
 
@@ -130,25 +160,23 @@
         function showQuestion(index) {
             document.querySelectorAll(".question").forEach(q => q.style.display = "none");
             document.getElementById(`q${index}`).style.display = "block";
-            messageDiv.textContent = hints[index] || "";
+            messageDiv.textContent = "";
         }
 
         function checkAnswer() {
             const answer = document.getElementById(`a${currentQuestion}`).value.trim().toLowerCase();
             if (answer.includes(questions[currentQuestion])) {
                 if (currentQuestion < questions.length - 1) {
-                    messageDiv.textContent = `Risposta esatta! ${hints[currentQuestion + 1] || ''}`;
                     currentQuestion++;
                     setTimeout(() => showQuestion(currentQuestion), 1500);
                 } else {
-                    messageDiv.textContent = "Risposta esatta! Ultima domanda: " + hints[hints.length - 1];
                     setTimeout(() => {
                         quizContainer.style.display = "none";
                         finalScreen.style.display = "block";
                     }, 2000);
                 }
             } else {
-                messageDiv.textContent = "Risposta sbagliata. Riprova! " + hints[currentQuestion];
+                messageDiv.textContent = "Risposta sbagliata. Riprova!";
             }
         }
 
